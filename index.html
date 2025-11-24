@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contoso Invoice Form</title>
+    <title>DIGIT'ALL - ARP - Formulário de Fatura</title>
     <style>
         * {
             margin: 0;
@@ -231,44 +231,44 @@
         <!-- Form View -->
         <div class="form-view" id="formView">
             <div class="header">
-                <h1>Contoso Invoice</h1>
-                <p>Complete all fields to submit invoice</p>
+                <h1>DIGIT'ALL - ARP</h1>
+                <p>Preencha todos os campos para submeter a fatura</p>
             </div>
 
             <form id="invoiceForm">
                 <div class="form-group">
-                    <label for="date">Date *</label>
+                    <label for="date">Data *</label>
                     <input type="date" id="date" name="date" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="account">Account *</label>
+                    <label for="account">Conta *</label>
                     <input type="text" id="account" name="account" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="contact">Contact *</label>
+                    <label for="contact">Contacto *</label>
                     <input type="text" id="contact" name="contact" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="amount">Amount *</label>
+                    <label for="amount">Valor *</label>
                     <input type="number" id="amount" name="amount" step="0.01" min="0" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="status">Status *</label>
+                    <label for="status">Estado *</label>
                     <select id="status" name="status" required>
-                        <option value="">Select status</option>
-                        <option value="Invoiced">Invoiced</option>
-                        <option value="Paid">Paid</option>
-                        <option value="Uninvoiced">Uninvoiced</option>
+                        <option value="">Selecione o estado</option>
+                        <option value="Faturado">Faturado</option>
+                        <option value="Pago">Pago</option>
+                        <option value="Não Faturado">Não Faturado</option>
                     </select>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-submit">Submit Invoice</button>
-                    <button type="reset" class="btn-reset">Clear Form</button>
+                    <button type="submit" class="btn-submit">Submeter Fatura</button>
+                    <button type="reset" class="btn-reset">Limpar Formulário</button>
                 </div>
             </form>
         </div>
@@ -283,20 +283,20 @@
                 </svg>
             </div>
 
-            <h1 class="success-title">Invoice Submitted Successfully!</h1>
+            <h1 class="success-title">Fatura Submetida com Sucesso!</h1>
 
             <div class="order-number-display">
-                <p class="order-label">Order Number:</p>
+                <p class="order-label">Número da Encomenda:</p>
                 <p class="order-number" id="orderNumber">-</p>
             </div>
 
             <div class="confirmation-message">
-                <p>Your invoice has been successfully submitted and recorded.</p>
+                <p>A sua fatura foi submetida e registada com sucesso.</p>
                 <p class="timestamp" id="timestamp"></p>
             </div>
 
             <div class="form-actions">
-                <button class="btn-submit" onclick="resetToForm()">Submit Another Invoice</button>
+                <button class="btn-submit" onclick="resetToForm()">Submeter Outra Fatura</button>
             </div>
         </div>
     </div>
@@ -315,9 +315,9 @@
             return currentOrder;
         }
 
-        // Format order number with leading zeros (e.g., INV-001001)
+        // Format order number with leading zeros (e.g., FAT-001001)
         function formatOrderNumber(num) {
-            return `INV-${String(num).padStart(6, '0')}`;
+            return `FAT-${String(num).padStart(6, '0')}`;
         }
 
         // Handle form submission
@@ -342,7 +342,7 @@
 
             // Display timestamp
             const now = new Date();
-            const timestamp = now.toLocaleString('en-US', {
+            const timestamp = now.toLocaleString('pt-PT', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -350,7 +350,7 @@
                 minute: '2-digit',
                 second: '2-digit'
             });
-            document.getElementById('timestamp').textContent = `Submitted on: ${timestamp}`;
+            document.getElementById('timestamp').textContent = `Submetido em: ${timestamp}`;
         });
 
         // Reset to form view
