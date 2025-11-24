@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contoso Invoice Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        input[type="date"],
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input:required:valid {
+            border-color: #28a745;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-submit,
+        .btn-reset {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        /* Confirmation View */
+        .confirmation-view {
+            display: none;
+            text-align: center;
+        }
+
+        .confirmation-view.active {
+            display: block;
+        }
+
+        .form-view.hidden {
+            display: none;
+        }
+
+        .success-icon {
+            margin-bottom: 30px;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            color: #28a745;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        .order-number-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .order-label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .order-number {
+            font-size: 3em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .confirmation-message {
+            margin: 30px 0;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .confirmation-message p {
+            margin: 10px 0;
+        }
+
+        .timestamp {
+            font-style: italic;
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .success-title {
+                font-size: 1.8em;
+            }
+
+            .order-number {
+                font-size: 2em;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn-submit,
+            .btn-reset {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Form View -->
+        <div class="form-view" id="formView">
+            <div class="header">
+                <h1>Contoso Invoice</h1>
+                <p>Complete all fields to submit invoice</p>
+            </div>
+
+            <form id="invoiceForm">
+                <div class="form-group">
+                    <label for="date">Date *</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="account">Account *</label>
+                    <input type="text" id="account" name="account" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact">Contact *</label>
+                    <input type="text" id="contact" name="contact" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount *</label>
+                    <input type="number" id="amount" name="amount" step="0.01" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status *</label>
+                    <select id="status" name="status" required>
+                        <option value="">Select status</option>
+                        <option value="Invoiced">Invoiced</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Uninvoiced">Uninvoiced</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Submit Invoice</button>
+                    <button type="reset" class="btn-reset">Clear Form</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Confirmation View -->
+        <div class="confirmation-view" id="confirmationView">
+            <div class="success-icon">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="40" r="38" stroke="#28a745" stroke-width="4" fill="none" />
+                    <path d="M25 40 L35 50 L55 30" stroke="#28a745" stroke-width="4" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+
+            <h1 class="success-title">Invoice Submitted Successfully!</h1>
+
+            <div class="order-number-display">
+                <p class="order-label">Order Number:</p>
+                <p class="order-number" id="orderNumber">-</p>
+            </div>
+
+            <div class="confirmation-message">
+                <p>Your invoice has been successfully submitted and recorded.</p>
+                <p class="timestamp" id="timestamp"></p>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn-submit" onclick="resetToForm()">Submit Another Invoice</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the current order number from localStorage or start at 1000
+        function getNextOrderNumber() {
+            let currentOrder = localStorage.getItem('lastOrderNumber');
+
+            if (!currentOrder) {
+                currentOrder = 999;
+            }
+
+            currentOrder = parseInt(currentOrder) + 1;
+            localStorage.setItem('lastOrderNumber', currentOrder);
+            return currentOrder;
+        }
+
+        // Format order number with leading zeros (e.g., INV-001001)
+        function formatOrderNumber(num) {
+            return `INV-${String(num).padStart(6, '0')}`;
+        }
+
+        // Handle form submission
+        document.getElementById('invoiceForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Check if all required fields are filled
+            const form = e.target;
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Generate sequential order number
+            const orderNumber = getNextOrderNumber();
+            const formattedOrderNumber = formatOrderNumber(orderNumber);
+
+            // Show confirmation view
+            document.getElementById('formView').classList.add('hidden');
+            document.getElementById('confirmationView').classList.add('active');
+            document.getElementById('orderNumber').textContent = formattedOrderNumber;
+
+            // Display timestamp
+            const now = new Date();
+            const timestamp = now.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('timestamp').textContent = `Submitted on: ${timestamp}`;
+        });
+
+        // Reset to form view
+        function resetToForm() {
+            document.getElementById('confirmationView').classList.remove('active');
+            document.getElementById('formView').classList.remove('hidden');
+            document.getElementById('invoiceForm').reset();
+
+            // Reset date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        }
+
+        // Set default date to today on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        });
+    </script>
+</body>
+
+</html>
